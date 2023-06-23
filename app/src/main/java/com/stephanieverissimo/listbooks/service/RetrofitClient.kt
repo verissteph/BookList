@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 
 object RetrofitClient {
-    private const val BASE_URL = "http://gutendex.com/"
+    private const val BASE_URL = "https://gutendex.com/"
     private val retrofit: Retrofit by lazy {
         val logginInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
