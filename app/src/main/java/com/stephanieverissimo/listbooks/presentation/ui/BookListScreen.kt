@@ -55,12 +55,13 @@ import com.stephanieverissimo.listbooks.presentation.viewModel.BookViewModel
                    .fillMaxWidth()
            ) {
                if(books.results.isNotEmpty()){
-                   BookList(books = books, onItemClick = { book: Book -> selectedBook.value = book })
+                   BookList(books, onItemClick = {book: Book ->
+                       navController.navigate("bookDetails/${book.id}")})
                }else{
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
                }
            }
-        selectedBook.value?.let{ book -> BookDetailsScreen(bookId = book.id, bookViewModel = bookViewModel, navController = navController )}
+       selectedBook.value?.let{ book -> BookDetailsScreen(bookId = book.id, bookViewModel = bookViewModel, navController = navController )}
        }
 
 
@@ -102,7 +103,14 @@ fun BookDetailsScreen(bookId: Int, bookViewModel: BookViewModel, navController: 
             style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold)
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.popBackStack() }) {
+        Button(
+            onClick = {
+                if (navController.currentBackStackEntry != null) {
+                    navController.popBackStack()
+                }
+            },
+
+        ) {
             Text(text = "Go Back")
         }
     }
@@ -135,30 +143,11 @@ fun BookApp(bookViewModel: BookViewModel) {
                     }
                 }
             }
-        if (navBackStackEntry.value?.destination?.route == "bookDetails/{id}") {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.5f)) // Cor e transparência da sombra
-            ) {
-
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                            .align(Alignment.Center)
-                    ) {
-                        Text(
-                            text = "Tela de Detalhes",
-                            style = TextStyle(fontSize = 20.sp, color = Color.White),
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
                     }
             }
-        }
-        }
 
-}
+
+
 
     @Composable
     fun BookList(books: BookResponse, onItemClick: (Book) -> Unit) {
